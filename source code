@@ -1,0 +1,51 @@
+#include "Arduino.h"//mp3
+#include "SoftwareSerial.h"//mp3
+#include "DFRobotDFPlayerMini.h"//mp3
+
+
+int b_pin = 2;   // デジタルデータ入力用ピン番号
+int state = 0;   // ピンより取得したデータ格納用
+
+int botton = 0;   //ボタンが押されているかどうかの状態　　0の時は押されてない　1の時押された　とする   
+
+
+SoftwareSerial mySoftwareSerial(10, 11); // RX, TX
+DFRobotDFPlayerMini myDFPlayer;//mp3
+void printDetail(uint8_t type, int value);//mp3
+
+void setup()
+{
+  mySoftwareSerial.begin(9600);
+  Serial.begin(9600);
+  
+  Serial.println();//mp3
+  Serial.println(F("DFRobot DFPlayer Mini Demo"));//mp3
+  Serial.println(F("Initializing DFPlayer ... (May take 3~5 seconds)"));//mp3
+  
+  if (!myDFPlayer.begin(mySoftwareSerial)) {  //Use softwareSerial to communicate with mp3.//mp3
+    Serial.println(F("Unable to begin:"));//mp3
+    Serial.println(F("1.Please recheck the connection!"));//mp3
+    Serial.println(F("2.Please insert the SD card!"));//mp3
+    while(true){//mp3
+      delay(0); // Code to compatible with ESP8266 watch dog.//mp3
+    }
+  }
+  Serial.println(F("DFPlayer Mini online."));//mp3
+  
+  myDFPlayer.volume(30);  //Set volume value. From 0 to 30
+  pinMode(b_pin, INPUT);     // ボタンスイッチ用に入力に設定
+}
+
+void loop()
+{
+  static unsigned long timer = millis();//mp3
+  
+  state = digitalRead(b_pin);  // ピンよりデータ取得 ボタンの状態を見ている　0押されてない　1押された
+
+ if(state==1){//もしボタンの状態が 1になった時
+ 
+  myDFPlayer.playFolder(1,1);//ちょっと何言ってるのかわかんないです再生
+} //if終了
+
+  
+}//loop終了
